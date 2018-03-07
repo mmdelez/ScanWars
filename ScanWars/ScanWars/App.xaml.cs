@@ -1,5 +1,4 @@
-﻿using ScanWars.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,12 +9,11 @@ namespace ScanWars
 {
     public partial class App : Application
     {
-        private IFacebookAuthenticationDelegate _facebookAuthenticationDelegate;
         public App()
         {
             InitializeComponent();
 
-            MainPage = new Pages.Login.LoginPage(new ViewModels.Login.LoginViewModel(_facebookAuthenticationDelegate));
+            MainPage = new NavigationPage(new Pages.Login.LoginPage(new ViewModels.Login.LoginViewModel()));
         }
 
         protected override void OnStart()

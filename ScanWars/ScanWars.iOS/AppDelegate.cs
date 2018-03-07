@@ -28,5 +28,7 @@ namespace ScanWars.iOS
 
             return base.FinishedLaunching(app, options);
         }
+
+
     }
 }

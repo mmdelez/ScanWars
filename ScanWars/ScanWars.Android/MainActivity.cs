@@ -6,6 +6,11 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using Xamarin.Facebook;
+using Android.Content;
+using Xamarin.Forms;
+using ScanWars.Services.Interfaces;
+using ScanWars.Droid.Services;
 
 namespace ScanWars.Droid
 {
@@ -23,10 +28,28 @@ namespace ScanWars.Droid
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
             base.OnCreate(bundle);
-
-            global::Xamarin.Auth.Presenters.XamarinAndroid.AuthenticationConfiguration.Init(this, bundle);
+            //FacebookSdk.SdkInitialize(this);
+            //global::Xamarin.Auth.Presenters.XamarinAndroid.AuthenticationConfiguration.Init(this, bundle);
             global::Xamarin.Forms.Forms.Init(this, bundle);
+            InitializeServices();
             LoadApplication(new App());
+        }
+
+        protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+        {
+            base.OnActivityResult(requestCode, resultCode, data);
+            var service = DependencyService.Get<IFacebookService>();
+            if (service != null)
+            {
+                (service as FacebookService).CallbackManager.OnActivityResult(requestCode, (int)resultCode, data);
+            }
+        }
+
+        private void InitializeServices()
+        {
+            #region Facebook
+            DependencyService.Register<IFacebookService, FacebookService>();
+            #endregion
         }
     }
 }

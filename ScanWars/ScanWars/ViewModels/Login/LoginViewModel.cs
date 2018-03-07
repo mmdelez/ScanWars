@@ -1,7 +1,8 @@
-﻿using ScanWars.Interfaces;
-using ScanWars.Models;
+﻿using ScanWars.Models;
+using ScanWars.Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,72 +14,59 @@ namespace ScanWars.ViewModels.Login
 {
     public class LoginViewModel : BaseViewModel
     {
-        private OAuth2Authenticator _authenticator;
-        private IFacebookAuthenticationDelegate _authenticationDelegate;
+        private string _message;
+        private bool _isLoggedIn;
+        private FacebookUser _user;
+        private IFacebookService _facebookService;
 
-        public LoginViewModel(IFacebookAuthenticationDelegate authenticationDelegate)
+        public LoginViewModel()
         {
-            _authenticationDelegate = authenticationDelegate;
-
-            #region Google Auth
-            //var authenticator = new OAuth2Authenticator(
-            //                        "789305869203-akr5j5oh0d54r7tqsko9qp25ilpktnse.apps.googleusercontent.com",
-            //                        null,
-            //                        "https://www.googleapis.com/auth/plus.login",
-            //                        new Uri(Constants.AuthorizeUrl),
-            //                        new Uri("https://console.developers.google.com/apis/credentials?project=applied-abbey-111204"),
-            //                        new Uri(Constants.AccessTokenUrl),
-            //                        null,
-            //                        true);
-            #endregion
-
-            #region Facebook Auth
-            _authenticator = new OAuth2Authenticator(
-                                    clientId: "185501372058546",
-                                    scope: "email",
-                                    authorizeUrl: new Uri("https://m.facebook.com/dialog/oauth/"),
-                                    redirectUrl: new Uri("https://www.facebook.com/connect/login_success.html"),
-                                    // switch for new Native UI API
-                                    //      true = Android Custom Tabs and/or iOS Safari View Controller
-                                    //      false = Embedded Browsers used (Android WebView, iOS UIWebView)
-                                    //  default = false  (not using NEW native UI)
-                                    isUsingNativeUI: true);
-
-            _authenticator.Completed += OnAuthCompleted;
-            _authenticator.Error += OnAuthError;
-
-            #endregion
+            _facebookService = DependencyService.Get<IFacebookService>();
 
             LoginButtonTappedCommand = new Command(OnLoginButtonTapped);
         }
 
         public ICommand LoginButtonTappedCommand { get; set; }
 
-        private void OnAuthCompleted(object sender, AuthenticatorCompletedEventArgs e)
+        public string Message
         {
-            if (e.IsAuthenticated)
-            {
-                var token = new FacebookOAuthToken
-                {
-                    AccessToken = e.Account.Properties["access_token"]
-                };
-                _authenticationDelegate.OnAuthenticationCompleted(token);
-            }
-            else
-            {
-                _authenticationDelegate.OnAuthenticationCanceled();
-            }
+            get { return _message; }
+            set { RaiseAndUpdate(ref _message, value); }
         }
 
-        private void OnAuthError(object sender, AuthenticatorErrorEventArgs e)
+        public bool IsLoggedIn
         {
-            _authenticationDelegate.OnAuthenticationFailed(e.Message, e.Exception);
+            get { return _isLoggedIn; }
+            set { RaiseAndUpdate(ref _isLoggedIn, value); }
+        }
+
+        public FacebookUser User
+        {
+            get { return _user; }
+            set { RaiseAndUpdate(ref _user, value); }
         }
 
         private void OnLoginButtonTapped()
         {
-            var presenter = new Xamarin.Auth.Presenters.OAuthLoginPresenter();
-            presenter.Login(_authenticator);
+            _facebookService?.Login(OnLoginCompleted);
+        }
+
+        private void OnLoginCompleted(FacebookUser user, Exception exception)
+        {
+            if (exception == null)
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    User = user;
+                    IsLoggedIn = true;
+                    App.Current.MainPage = new NavigationPage(new Pages.Main.HomePage(new Main.HomePageViewModel(_user)));
+                });
+            }
+            else
+            {
+                Debug.WriteLine("Error: " + exception.Message);
+                App.Current.MainPage.DisplayAlert("Error", exception.Message, "OK");
+            }
         }
     }
 }

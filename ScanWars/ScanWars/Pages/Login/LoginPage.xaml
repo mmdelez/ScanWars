@@ -5,7 +5,7 @@
              x:Class="ScanWars.Pages.Login.LoginPage">
     <ContentPage.Content>
         <StackLayout>
-            <Button Text="Click Me!"
+            <Button Text="Login with Facebook"
                     VerticalOptions="CenterAndExpand" 
                     HorizontalOptions="CenterAndExpand"
                     Command="{Binding LoginButtonTappedCommand}"/>
