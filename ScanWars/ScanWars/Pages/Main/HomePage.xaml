@@ -8,18 +8,55 @@
             <Button Text="Logout"
 					Command="{Binding LogoutCommand}"/>
 
-            <Image Source="{Binding FacebookUser.Picture}"/>
+            <!--<Image Source="{Binding FacebookUser.Picture}"/>
 
             <Label Text="{Binding FacebookUser.Id, StringFormat='Id: {0}'}"/>
-
-            <Label Text="{Binding FacebookUser.Token, StringFormat='Token: {0}'}"/>
-
-            <Label Text="{Binding FacebookUser.FirstName, StringFormat='First Name: {0}'}"/>
+            
+            <Label Text="{Binding FacebookUser.FirstName, StringFormat='Name: {0} {1}'}"/>
 
             <Label Text="{Binding FacebookUser.LastName, StringFormat='Last Name: {0}'}"/>
 
-            <Label Text="{Binding FacebookUser.Email, StringFormat='Email: {0}'}"/>
+            <Label Text="{Binding FacebookUser.Email, StringFormat='Email: {0}'}"/>-->
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Row="0"
+                        Grid.Column="0"
+                        Text="Info"/>
+                
+                <Button Grid.Row="0"
+                        Grid.Column="2"
+                        Text="Settings"/>
+            </Grid>
             
+            <StackLayout HorizontalOptions="CenterAndExpand"
+                         VerticalOptions="CenterAndExpand"
+                         Orientation="Horizontal"
+                         Spacing="40">
+                
+                <Button Text="Play"
+                        HeightRequest="200"
+                        WidthRequest="200"/>
+                
+                <Button Text="Scan"
+                        HeightRequest="200"
+                        WidthRequest="200"
+                        Command="{Binding ScanButtonCommand}"/>
+                
+                <Button Text="Collection"
+                        HeightRequest="200"
+                        WidthRequest="200"/>
+                
+            </StackLayout>
+
         </StackLayout>
     </ContentPage.Content>
 </pages:BasePage>

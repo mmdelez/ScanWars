@@ -12,23 +12,30 @@ namespace ScanWars.ViewModels.Main
 {
     public class HomePageViewModel : BaseViewModel
     {
-        private FacebookUser _user;
+        private User _user;
         private IFacebookService _facebookService;
 
-        public HomePageViewModel(FacebookUser user)
+        public HomePageViewModel(User user)
         {
             _facebookService = DependencyService.Get<IFacebookService>();
             _user = user;
+            ScanButtonCommand = new Command(OnScanButtonTapped);
             LogoutCommand = new Command(OnLogoutButtonTapped);
         }
 
-        public FacebookUser FacebookUser
+        public User User
         {
             get { return _user; }
             set { RaiseAndUpdate(ref _user, value); }
         }
 
+        public ICommand ScanButtonCommand { get; set; }
         public ICommand LogoutCommand { get; set; }
+
+        private async void OnScanButtonTapped()
+        {
+            await Navigation.PushAsync(new Pages.Scanner.ScannerPage(new Scanner.ScannerPageViewModel(User)));
+        }
 
         private void OnLogoutButtonTapped()
         {

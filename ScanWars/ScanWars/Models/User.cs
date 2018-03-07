@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ScanWars.Models
 {
-    public class FacebookUser
+    public class User
     {
-        public FacebookUser(string id, string token, string firstName, string lastName, string email, string imageUrl)
+        public User(string id, string token, string firstName, string lastName, string email, string imageUrl)
         {
             Id = id;
             Token = token;

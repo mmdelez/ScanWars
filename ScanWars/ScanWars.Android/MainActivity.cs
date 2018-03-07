@@ -19,6 +19,7 @@ namespace ScanWars.Droid
         Theme = "@style/MainTheme",
         MainLauncher = true,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
+        ScreenOrientation = ScreenOrientation.Landscape,
         LaunchMode = LaunchMode.SingleTop)]
 
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
@@ -31,8 +32,14 @@ namespace ScanWars.Droid
             //FacebookSdk.SdkInitialize(this);
             //global::Xamarin.Auth.Presenters.XamarinAndroid.AuthenticationConfiguration.Init(this, bundle);
             global::Xamarin.Forms.Forms.Init(this, bundle);
+            ZXing.Net.Mobile.Forms.Android.Platform.Init();
             InitializeServices();
             LoadApplication(new App());
+        }
+
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
+        {
+            global::ZXing.Net.Mobile.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
 
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)

@@ -15,7 +15,7 @@ namespace ScanWars.ViewModels.Login
     {
         private string _message;
         private bool _isLoggedIn;
-        private FacebookUser _user;
+        private User _user;
         private IFacebookService _facebookService;
 
         public LoginViewModel()
@@ -39,7 +39,7 @@ namespace ScanWars.ViewModels.Login
             set { RaiseAndUpdate(ref _isLoggedIn, value); }
         }
 
-        public FacebookUser User
+        public User User
         {
             get { return _user; }
             set { RaiseAndUpdate(ref _user, value); }
@@ -50,7 +50,7 @@ namespace ScanWars.ViewModels.Login
             _facebookService?.Login(OnLoginCompleted);
         }
 
-        private void OnLoginCompleted(FacebookUser user, Exception exception)
+        private void OnLoginCompleted(User user, Exception exception)
         {
             if (exception == null)
             {

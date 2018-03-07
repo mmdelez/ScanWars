@@ -9,7 +9,7 @@ namespace ScanWars.Services.Interfaces
 {
     public interface IFacebookService
     {
-        void Login(Action<FacebookUser, Exception> OnLoginCompleted);
+        void Login(Action<User, Exception> OnLoginCompleted);
         void Logout();
     }
 }

@@ -21,7 +21,7 @@ namespace ScanWars.Droid.Services
     {
         public ICallbackManager CallbackManager;
 
-        Action<FacebookUser, System.Exception> _onLoginComplete;
+        Action<User, System.Exception> _onLoginComplete;
 
         public FacebookService()
         {
@@ -30,7 +30,7 @@ namespace ScanWars.Droid.Services
         }
 
         #region IFacebookManager
-        public void Login(Action<FacebookUser, System.Exception> OnLoginComplete)
+        public void Login(Action<User, System.Exception> OnLoginComplete)
         {
             _onLoginComplete = OnLoginComplete;
             LoginManager.Instance.SetLoginBehavior(LoginBehavior.NativeWithFallback);
@@ -102,7 +102,7 @@ namespace ScanWars.Droid.Services
                 }
             }
 
-            _onLoginComplete?.Invoke(new FacebookUser(id, AccessToken.CurrentAccessToken.Token, first_name, last_name, email, pictureUrl), null);
+            _onLoginComplete?.Invoke(new User(id, AccessToken.CurrentAccessToken.Token, first_name, last_name, email, pictureUrl), null);
         }
         #endregion
     }
