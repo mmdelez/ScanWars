@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Facebook.CoreKit;
 using Foundation;
+using ScanWars.iOS.Services;
+using ScanWars.Services.Interfaces;
 using UIKit;
+using Xamarin.Forms;
 
 namespace ScanWars.iOS
 {
@@ -22,13 +25,35 @@ namespace ScanWars.iOS
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-            global::Xamarin.Auth.Presenters.XamarinIOS.AuthenticationConfiguration.Init();
             global::Xamarin.Forms.Forms.Init();
+
+            InitializeServices();
+
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);
         }
 
+        public override void OnActivated(UIApplication uiApplication)
+        {
+            base.OnActivated(uiApplication);
+            #region FacebookService
+            AppEvents.ActivateApp();
+            #endregion
+        }
 
+        public override bool OpenUrl(UIApplication application, NSUrl url, string sourceApplication, NSObject annotation)
+        {
+            #region FacebookService
+            return ApplicationDelegate.SharedInstance.OpenUrl(application, url, sourceApplication, annotation);
+            #endregion
+        }
+
+        private void InitializeServices()
+        {
+            #region Facebook
+            DependencyService.Register<IFacebookService, FacebookService>();
+            #endregion
+        }
     }
 }

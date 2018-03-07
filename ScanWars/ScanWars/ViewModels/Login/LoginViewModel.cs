@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Xamarin.Auth;
 using Xamarin.Forms;
 
 namespace ScanWars.ViewModels.Login
